@@ -1,35 +1,36 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import bodyParser from "body-parser";
-import connectDb from "./config/db.js";  
-
-dotenv.config(); 
-
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const app = express();
+require("dotenv").config();
+const port = process.env.PORT || 5000;
+const todoRouter = require("./routes/todoRouter");
+const authRouter = require("./routes/authRouter");
+const connectDb = require("./config/db");
 
-app.use(express.json());
-app.use(cors());
+// Enable CORS (Cross-Origin Resource Sharing)
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow requests from your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // Allow cookies and credentials
+  })
+);
+
+// Use body-parser middleware to parse JSON bodies
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true })); // For URL-encoded data (e.g., form submissions)
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
-const PORT = process.env.PORT || 5000;
-
-console.log("Starting the application...");
-
+// Database connection
 connectDb()
   .then(() => {
-    console.log("Database connected successfully.");
-    // Uncomment these once your routes are working
-    // app.use("/api/auth", authRouter);
-    // app.use("/api/", todoRouter);
+    // Register routes
+    app.use("/api/auth", authRouter);
+    app.use("/api/", todoRouter);
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    // Start the server
+    app.listen(port, () => {
+      console.log(`> Server is up and running on port: ${port}`);
     });
   })
   .catch((err) => {

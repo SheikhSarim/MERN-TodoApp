@@ -7,7 +7,11 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["server", "express", "mongodb"],
+  "keywords": [
+    "server",
+    "express",
+    "mongodb"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "description": "Server application using Express.js and MongoDB",
@@ -23,6 +27,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  },
-  "type": "module"
+  }
 }
